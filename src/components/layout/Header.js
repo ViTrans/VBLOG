@@ -1,6 +1,9 @@
 import { Button } from "components/button";
 import { useAuth } from "contexts/auth-context";
-import React from "react";
+import { db } from "firebase-app/firebase-config";
+import { FirebaseError } from "firebase/app";
+import { collection, onSnapshot, query } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 const menuLinks = [
@@ -15,11 +18,11 @@ const menuLinks = [
 ];
 
 const HeaderStyles = styled.header`
-  padding: 20px 0;
+  padding: 10px 0;
   .header-main {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
   }
   .header-auth {
     display: flex;
@@ -42,6 +45,7 @@ const HeaderStyles = styled.header`
   }
   .menu {
     display: flex;
+    flex: 1;
     align-items: center;
     gap: 20px;
     margin-left: 40px;
@@ -84,6 +88,8 @@ const HeaderStyles = styled.header`
     }
     .header-main {
       position: relative;
+      justify-content: space-between;
+      align-items: center;
     }
     /* .search,
     .header-button,
@@ -94,16 +100,68 @@ const HeaderStyles = styled.header`
       display: flex;
       flex-direction: column;
     }
+    .menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      background: #fff;
+      width: 100%;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 1;
+    }
+    .menu.active {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+`;
+// responsive menu
+const MenuIconStyles = styled.div`
+  display: none;
+  @media screen and (max-width: 1023.98px) {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50px;
+    margin-left: 20px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 1;
   }
 `;
 const Header = () => {
   const { userInfo } = useAuth();
+  const handleToggleMenu = () => {
+    document.querySelector(".menu").classList.toggle("active");
+  };
+  // get category form firebase and show in menu
+  const [categories, setCategories] = useState([]);
+  React.useEffect(() => {
+    async function fetchCategories() {
+      const docRef = query(collection(db, "categories"));
+      const queries = query(docRef);
+      onSnapshot(queries, (snapshot) => {
+        const results = [];
+        snapshot.forEach((doc) => {
+          results.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+        setCategories(results);
+      });
+    }
+    fetchCategories();
+  }, []);
+
   return (
     <HeaderStyles>
       <div className="container">
         <div className="header-main">
           <NavLink to="/">
-            <img srcSet="/logo.png 2x" alt="monkey-blogging" className="logo" />
+            <img srcSet="/logo.png 2x" alt="VBLOG" className="logo" />
           </NavLink>
           <ul className="menu">
             {menuLinks.map((item) => (
@@ -113,8 +171,15 @@ const Header = () => {
                 </NavLink>
               </li>
             ))}
+            {categories.map((item) => (
+              <li className="menu-item" key={item.id}>
+                <NavLink to={`/category/${item.slug}`} className="menu-link">
+                  {item.name}
+                </NavLink>
+              </li>
+            ))}
           </ul>
-          {/* <div className="menu-icon">
+          <MenuIconStyles onClick={handleToggleMenu}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -129,7 +194,7 @@ const Header = () => {
                 d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5"
               />
             </svg>
-          </div> */}
+          </MenuIconStyles>
           {/* <div className="search">
             <input
               type="text"

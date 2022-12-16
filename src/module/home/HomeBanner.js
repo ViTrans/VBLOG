@@ -1,65 +1,71 @@
 import { Button } from "components/button";
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const HomeBannerStyles = styled.div`
-  min-height: 500px;
-  padding: 40px 0;
-  /* background-image: linear-gradient(
-    to right bottom,
-    ${(props) => props.theme.primary},
-    ${(props) => props.theme.secondary}
-  ); */
-  background-image: url("./banner.jpg");
-  background-position: center;
-  background-size: cover;
-  margin-bottom: 60px;
-  .banner {
+  padding: 100px 0;
+  .banner-blog {
     display: flex;
-    justify-content: center;
     align-items: center;
-    min-height: 500px;
-    &-content {
-      max-width: 800px;
-      color: black;
-      font-weight: 500;
-      text-align: center;
-      background-color: rgba(250, 250, 250, 0.5);
-      padding: 20px;
+    justify-content: space-between;
+    gap: 20px;
+    .banner-blog__content {
+      flex: 1;
+      .banner-blog__title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+      }
+      .banner-blog__desc {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+      }
     }
-    &-heading {
-      font-size: 36px;
-      margin-bottom: 20px;
-      font-weight: bold;
-    }
-    &-desc {
-      line-height: 1.75;
-      margin-bottom: 40px;
-    }
-    .banner-button {
-      background-color: black;
-      color: white;
+    .banner-blog__img {
+      flex: 1;
+      position: relative;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+      .banner-blog__img__overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+      }
     }
   }
   @media screen and (max-width: 1023.98px) {
-    .banner {
+    .banner-blog {
       flex-direction: column;
-      &-heading {
-        font-size: 30px;
-        margin-bottom: 10px;
-      }
-      &-desc {
-        font-size: 14px;
+      .banner-blog__content {
         margin-bottom: 20px;
+        .banner-blog__title {
+          font-size: 2rem;
+          margin-bottom: 20px;
+          text-align: center;
+          font-weight: 700;
+          margin-bottom: 20px;
+        }
+        .banner-blog__desc {
+          font-size: 1.2rem;
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        .banner-blog-btn {
+          display: none;
+        }
       }
-      &-image {
-        margin-top: 25px;
-      }
-      &-button {
-        font-size: 14px;
-        height: auto;
-        padding: 15px;
-      }
+    }
+    .banner-blog__img {
+      display: none;
     }
   }
 `;
@@ -68,17 +74,30 @@ const HomeBanner = () => {
   return (
     <HomeBannerStyles>
       <div className="container">
-        <div className="banner">
-          <div className="banner-content">
-            <h1 className="banner-heading">VBLOG</h1>
-            <p className="banner-desc">
-              VBLOG LÀ MỘT NỀN TẢNG ĐỂ CÁC BẠN CÓ THỂ CHIA SẼ NHỮNG CÂU CHUYỆN
-              VÀ KINH NGHIỆM CỦA MÌNH VỚI MỌI NGƯỜI, GIÚP MỌI NGƯỜI CÓ THỂ TÌM
-              HIỂU VÀ HỌC HỎI THÊM NHIỀU THỨ MỚI MỖI NGÀY.
+        {/* banner blog */}
+        <div className="banner-blog">
+          <div className="banner-blog__content">
+            <h1 className="banner-blog__title">
+              Chào mừng đến với blog của tôi
+            </h1>
+            <p className="banner-blog__desc">
+              Blog này được tạo ra với mục đích chia sẻ những kiến thức về lập
+              trình và các kỹ năng mềm khác. Bạn có thể đọc những bài viết của
+              mình để có thêm kiến thức. Nếu bạn thấy bài viết hay, hãy chia sẻ
+              cho mọi người biết nhé. Cảm ơn bạn đã ghé thăm blog của mình. Chúc
+              bạn có những giây phút vui vẻ.
             </p>
-            <Button to="/sign-up" kind="secondary" className="banner-button">
-              Bắt Đầu
+            <Button className="banner-blog-btn">
+              <Link to="/blog">Read more</Link>
             </Button>
+          </div>
+          {/* banner blog__img */}
+          <div className="banner-blog__img">
+            <img
+              src="https://images.unsplash.com/photo-1453928582365-b6ad33cbcf64?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1473&q=80"
+              alt=""
+            />
+            <div className="banner-blog__img__overlay"></div>
           </div>
         </div>
       </div>

@@ -46,6 +46,11 @@ const DashboardLayout = () => {
       <div className="dashboard-main">
         <Sidebar></Sidebar>
         <div className="dashboard-children">
+          {userInfo?.role === parseInt(3) && (
+            <p className="text-gray-500 text-2xl">
+              Chỉ có admin mới có quyền truy cập vào trang này
+            </p>
+          )}
           <Outlet></Outlet>
         </div>
       </div>
