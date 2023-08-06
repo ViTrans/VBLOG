@@ -5,10 +5,11 @@ import {
   collection,
   onSnapshot,
   serverTimestamp,
+  where,
+  query,
 } from "firebase/firestore";
 import PostCommentItem from "module/post/PostCommentItem";
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 const PostCommentStyles = styled.div`
   .post-comment {
@@ -131,30 +132,41 @@ const PostCommentStyles = styled.div`
   }
 `;
 
-const PostComment = ({ postId, user }) => {
+const PostComment = ({ postId, user, postName }) => {
   const [comment, setComment] = React.useState("");
   const [comments, setComments] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   useEffect(() => {
-    const docRef = collection(db, "posts", postId, "comments");
-    onSnapshot(docRef, (snapshot) => {
-      const comments = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setComments(comments);
-    });
+    const getData = async () => {
+      const q = query(
+        collection(db, "comments"),
+        where("postId", "==", postId)
+      );
+      onSnapshot(q, (querySnapshot) => {
+        const results = [];
+        querySnapshot.forEach((doc) => {
+          results.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+        setComments(results);
+      });
+    };
+    getData();
   }, [postId]);
   const sendComment = async (e) => {
     e.preventDefault();
     setLoading(true);
     const commentTosend = comment;
     setComment("");
-    await addDoc(collection(db, "posts", postId, "comments"), {
+    await addDoc(collection(db, "comments"), {
       comment: commentTosend,
       username: user.fullname,
       avatar: user.avatar,
       userId: user.uid,
+      postId: postId,
+      postName: postName,
       timestamp: serverTimestamp(),
     });
     setLoading(false);
@@ -195,7 +207,6 @@ const PostComment = ({ postId, user }) => {
                 key={comment.id}
                 comment={comment}
                 user={user}
-                postId={postId}
               ></PostCommentItem>
             ))}
           </div>

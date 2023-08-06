@@ -91,3 +91,19 @@ input:-webkit-autofill:active {
     z-index: 10;
   }
 }
+
+@keyframes moveUpDown {
+  0% {
+    top: 0;
+  }
+  50% {
+    top: 15px;
+  }
+  100% {
+    top: 0;
+  }
+}
+.banner-img {
+  position: relative;
+  animation: moveUpDown 1.5s ease-in-out infinite;
+}

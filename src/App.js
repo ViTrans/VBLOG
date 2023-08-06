@@ -2,6 +2,7 @@ import Blog from "pages/Blog";
 import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/auth-context";
+import DashboardComment from "module/comment/DashboardComment";
 
 const HomePage = React.lazy(() => import("pages/HomePage"));
 const CategoryPage = React.lazy(() => import("pages/CategoryPage"));
@@ -50,6 +51,10 @@ function App() {
               path="/:slug"
               element={<PostDetailsPage></PostDetailsPage>}
             ></Route>
+            <Route
+              path="/profile"
+              element={<UserProfile></UserProfile>}
+            ></Route>
             <Route element={<DashboardLayout></DashboardLayout>}>
               <Route
                 path="/dashboard"
@@ -92,8 +97,8 @@ function App() {
                 element={<UserUpdate></UserUpdate>}
               ></Route>
               <Route
-                path="/profile"
-                element={<UserProfile></UserProfile>}
+                path="/manage/comments"
+                element={<DashboardComment></DashboardComment>}
               ></Route>
             </Route>
           </Routes>

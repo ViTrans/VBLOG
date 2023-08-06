@@ -3,6 +3,7 @@ import { Field } from "components/field";
 import ImageUpload from "components/image/ImageUpload";
 import { Input } from "components/input";
 import { Label } from "components/label";
+import Layout from "components/layout/Layout";
 import { Textarea } from "components/textarea";
 import { useAuth } from "contexts/auth-context";
 import { db } from "firebase-app/firebase-config";
@@ -51,7 +52,6 @@ const UserProfile = () => {
       await updateDoc(colRef, {
         fullname: values.fullname,
         email: values.email,
-        password: values.password,
         description: values.description,
         username: slugify(values.username || values.fullname, {
           lower: true,
@@ -88,76 +88,65 @@ const UserProfile = () => {
 
   if (!userId) return null;
   return (
-    <div>
-      <DashboardHeading
-        title="Update user"
-        desc="Update user information"
-      ></DashboardHeading>
-      <form onSubmit={handleSubmit(handleUpdateUser)}>
-        <div className="w-[200px] h-[200px] mx-auto rounded-full mb-10">
-          <ImageUpload
-            className="!rounded-full h-full"
-            onChange={handleSelectImage}
-            handleDeleteImage={handleDeleteImage}
-            progress={progress}
-            image={image}
-          ></ImageUpload>
-        </div>
-        <div className="form-layout">
-          <Field>
-            <Label>Fullname</Label>
-            <Input
-              name="fullname"
-              placeholder="Enter your fullname"
-              control={control}
-            ></Input>
-          </Field>
-          <Field>
-            <Label>Username</Label>
-            <Input
-              name="username"
-              placeholder="Enter your username"
-              control={control}
-            ></Input>
-          </Field>
-        </div>
-        <div className="form-layout">
-          <Field>
-            <Label>Email</Label>
-            <Input
-              name="email"
-              placeholder="Enter your email"
-              control={control}
-              type="email"
-            ></Input>
-          </Field>
-          <Field>
-            <Label>Password</Label>
-            <Input
-              name="password"
-              placeholder="Enter your password"
-              control={control}
-              type="password"
-            ></Input>
-          </Field>
-        </div>
-        <div className="form-layout">
-          <Field>
-            <Label>Description</Label>
-            <Textarea name="description" control={control}></Textarea>
-          </Field>
-        </div>
-        <Button
-          kind="primary"
-          type="submit"
-          className="mx-auto w-[200px]"
-          isLoading={isSubmitting}
-          disabled={isSubmitting}
-        >
-          Update
-        </Button>
-      </form>
-    </div>
+    <Layout>
+      <div className="container">
+        <form onSubmit={handleSubmit(handleUpdateUser)}>
+          <div className="w-[200px] h-[200px] mx-auto rounded-full mb-10">
+            <ImageUpload
+              className="!rounded-full h-full"
+              onChange={handleSelectImage}
+              handleDeleteImage={handleDeleteImage}
+              progress={progress}
+              image={image}
+            ></ImageUpload>
+          </div>
+          <div className="form-layout">
+            <Field>
+              <Label>Fullname</Label>
+              <Input
+                name="fullname"
+                placeholder="Enter your fullname"
+                control={control}
+              ></Input>
+            </Field>
+            <Field>
+              <Label>Username</Label>
+              <Input
+                name="username"
+                placeholder="Enter your username"
+                control={control}
+              ></Input>
+            </Field>
+          </div>
+          <div className="form-layout">
+            <Field>
+              <Label>Email</Label>
+              <Input
+                name="email"
+                placeholder="Enter your email"
+                control={control}
+                type="email"
+              ></Input>
+            </Field>
+          </div>
+          <div className="form-layout">
+            <Field>
+              <Label>Description</Label>
+              <Textarea name="description" control={control}></Textarea>
+            </Field>
+          </div>
+          <Button
+            kind="primary"
+            type="submit"
+            className="mx-auto w-[200px]"
+            isLoading={isSubmitting}
+            disabled={isSubmitting}
+          >
+            Update
+          </Button>
+        </form>
+      </div>
+    </Layout>
   );
 };
 

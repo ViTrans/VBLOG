@@ -1,11 +1,13 @@
 import { Button } from "components/button";
 import { useAuth } from "contexts/auth-context";
-import { db } from "firebase-app/firebase-config";
+import { auth, db } from "firebase-app/firebase-config";
 import { FirebaseError } from "firebase/app";
 import { collection, onSnapshot, query } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { signOut } from "firebase/auth";
 import styled from "styled-components";
+
 const menuLinks = [
   {
     url: "/",
@@ -133,6 +135,11 @@ const MenuIconStyles = styled.div`
 `;
 const Header = () => {
   const { userInfo } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleToggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
   const handleToggleMenu = () => {
     document.querySelector(".menu").classList.toggle("active");
   };
@@ -165,14 +172,14 @@ const Header = () => {
           </NavLink>
           <ul className="menu">
             {menuLinks.map((item) => (
-              <li className="menu-item" key={item.title}>
+              <li className="menu-item mb-2 md:mb-0" key={item.title}>
                 <NavLink to={item.url} className="menu-link">
                   {item.title}
                 </NavLink>
               </li>
             ))}
             {categories.map((item) => (
-              <li className="menu-item" key={item.id}>
+              <li className="menu-item mb-2 md:mb-0" key={item.id}>
                 <NavLink to={`/category/${item.slug}`} className="menu-link">
                   {item.name}
                 </NavLink>
@@ -195,43 +202,6 @@ const Header = () => {
               />
             </svg>
           </MenuIconStyles>
-          {/* <div className="search">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search posts..."
-            />
-            <span className="search-icon">
-              <svg
-                width="18"
-                height="17"
-                viewBox="0 0 18 17"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <ellipse
-                  cx="7.66669"
-                  cy="7.05161"
-                  rx="6.66669"
-                  ry="6.05161"
-                  stroke="#999999"
-                  strokeWidth="1.5"
-                />
-                <path
-                  d="M17.0001 15.5237L15.2223 13.9099L14.3334 13.103L12.5557 11.4893"
-                  stroke="#999999"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M11.6665 12.2964C12.9671 12.1544 13.3706 11.8067 13.4443 10.6826"
-                  stroke="#999999"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </span>
-          </div> */}
           {!userInfo ? (
             <Button
               type="button"
@@ -242,13 +212,27 @@ const Header = () => {
               Login
             </Button>
           ) : (
-            <div className="header-auth">
-              <Link
-                to={`/profile?id=${userInfo.uid}`}
-                className="header-avatar"
+            <div className="header-auth relative">
+              <div
+                onClick={handleToggleDropdown}
+                className="header-avatar cursor-pointer"
               >
                 <img src={userInfo?.avatar} alt="" />
-              </Link>
+              </div>
+              <div
+                className={`absolute bottom-0 translate-x-[-20%] -translate-y-[-100%] bg-white shadow-md px-5 py-3 rounded-md h-auto ${
+                  isOpen ? "" : "hidden"
+                } `}
+              >
+                <ul className="flex flex-col gap-y-2">
+                  <li className="cursor-pointer">
+                    <Link to={`/profile?id=${userInfo.uid}`}>Profile</Link>
+                  </li>
+                  <li className="cursor-pointer" onClick={() => signOut(auth)}>
+                    Logout
+                  </li>
+                </ul>
+              </div>
             </div>
           )}
         </div>

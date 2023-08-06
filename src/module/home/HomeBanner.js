@@ -2,12 +2,12 @@ import { Button } from "components/button";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Typewriter } from "react-simple-typewriter";
 
 const HomeBannerStyles = styled.div`
   padding: 100px 0;
   .banner-blog {
     display: flex;
-    align-items: center;
     justify-content: space-between;
     gap: 20px;
     .banner-blog__content {
@@ -73,32 +73,38 @@ const HomeBannerStyles = styled.div`
 const HomeBanner = () => {
   return (
     <HomeBannerStyles>
-      <div className="container">
-        {/* banner blog */}
-        <div className="banner-blog">
-          <div className="banner-blog__content">
-            <h1 className="banner-blog__title">
-              Chào mừng đến với blog của tôi
-            </h1>
-            <p className="banner-blog__desc">
-              Blog này được tạo ra với mục đích chia sẻ những kiến thức về lập
-              trình và các kỹ năng mềm khác. Bạn có thể đọc những bài viết của
-              mình để có thêm kiến thức. Nếu bạn thấy bài viết hay, hãy chia sẻ
-              cho mọi người biết nhé. Cảm ơn bạn đã ghé thăm blog của mình. Chúc
-              bạn có những giây phút vui vẻ.
-            </p>
-            <Button className="banner-blog-btn">
-              <Link to="/blog">Read more</Link>
-            </Button>
-          </div>
-          {/* banner blog__img */}
-          <div className="banner-blog__img">
-            <img
-              src="https://images.unsplash.com/photo-1453928582365-b6ad33cbcf64?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1473&q=80"
-              alt=""
+      <div className="flex items-center h-screen">
+        <div className="relative w-full h-full">
+          <img
+            src="banner2.png"
+            alt="banner"
+            className="md:object-cover h-full w-full banner-img"
+            style={{
+              objectPosition: "80%",
+              objectFit: "cover",
+            }}
+          />
+          <h1
+            className="text-6xl font-bold text-black absolute top-1/4 w-full h-screen container flex flex-col"
+            style={{
+              maxWidth: "600px",
+            }}
+          >
+            <span className="text-8xl">Hello</span>
+            <Typewriter
+              words={[
+                "Chào mừng bạn đến với blog của tôi",
+                "blog này được tạo ra để chia sẻ những kiến thức của tôi về lập trình web",
+              ]}
+              loop={0}
+              cursor
+              cursorStyle="_"
+              typeSpeed={70}
+              deleteSpeed={50}
+              delaySpeed={1000}
+              onLoopDone={() => console.log(`Done after 5 loops!`)}
             />
-            <div className="banner-blog__img__overlay"></div>
-          </div>
+          </h1>
         </div>
       </div>
     </HomeBannerStyles>

@@ -6,6 +6,7 @@ import {
   onSnapshot,
   query,
   where,
+  orderBy,
 } from "firebase/firestore";
 import PostFeatureItem from "module/post/PostFeatureItem";
 import React, { useEffect, useState } from "react";
@@ -21,6 +22,7 @@ const HomeFeature = () => {
       colRef,
       where("status", "==", 1),
       where("hot", "==", true),
+      orderBy("createdAt", "desc"),
       limit(3)
     );
     onSnapshot(queries, (snapshot) => {

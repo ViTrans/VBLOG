@@ -6,6 +6,7 @@ import {
   onSnapshot,
   query,
   where,
+  orderBy,
 } from "firebase/firestore";
 import PostNewestItem from "module/post/PostNewestItem";
 import PostNewestLarge from "module/post/PostNewestLarge";
@@ -44,6 +45,7 @@ const HomeNewest = () => {
       colRef,
       where("status", "==", 1),
       where("hot", "==", false),
+      orderBy("createdAt", "desc"),
       limit(4)
     );
     onSnapshot(queries, (snapshot) => {

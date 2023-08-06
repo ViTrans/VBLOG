@@ -2,18 +2,42 @@ import { db } from "firebase-app/firebase-config";
 import { deleteDoc, doc } from "firebase/firestore";
 import React from "react";
 import Moment from "react-moment";
+import Swal from "sweetalert2";
 
 const PostCommentItem = (props) => {
-  const { comment, user, postId } = props;
+  const { comment, user } = props;
   // delete comment firebase
-  const handleDeleteComment = async (id) => {
-    const confirm = window.confirm("Are you sure to delete this comment?");
-    if (confirm && user.uid === comment?.userId) {
+  const handleDeleteComment = async (id, userId) => {
+    if (user.uid === userId) {
       try {
-        await deleteDoc(doc(db, "posts", postId, "comments", id));
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You will not be able to recover this imaginary file!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "No, keep it",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await deleteDoc(doc(db, "comments", id));
+            Swal.fire(
+              "Deleted!",
+              "Your imaginary file has been deleted.",
+              "success"
+            );
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire("Cancelled", "Your imaginary file is safe :)", "error");
+          }
+        });
       } catch (error) {
         console.log(error);
       }
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "You don't have permission to delete this comment",
+      });
     }
   };
   return (
@@ -38,7 +62,7 @@ const PostCommentItem = (props) => {
             {user?.uid === comment?.userId && (
               <button
                 className="btn-action"
-                onClick={() => handleDeleteComment(comment.id)}
+                onClick={() => handleDeleteComment(comment.id, user.uid)}
               >
                 Xóa
               </button>

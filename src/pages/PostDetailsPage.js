@@ -176,7 +176,11 @@ const PostDetailsPage = () => {
             <AuthorBox userId={user.id}></AuthorBox>
           </div>
           <PostRelated categoryId={postInfo?.category?.id}></PostRelated>
-          <PostComment postId={postInfo?.id} user={userInfo}></PostComment>
+          <PostComment
+            postId={postInfo?.id}
+            user={userInfo}
+            postName={postInfo.title}
+          ></PostComment>
         </div>
       </Layout>
     </PostDetailsPageStyles>
