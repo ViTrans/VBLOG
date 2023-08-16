@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { Typewriter } from "react-simple-typewriter";
 
 const HomeBannerStyles = styled.div`
-  padding: 100px 0;
   .banner-blog {
     display: flex;
     justify-content: space-between;

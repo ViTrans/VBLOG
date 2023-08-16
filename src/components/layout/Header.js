@@ -220,7 +220,7 @@ const Header = () => {
                 <img src={userInfo?.avatar} alt="" />
               </div>
               <div
-                className={`absolute bottom-0 translate-x-[-20%] -translate-y-[-100%] bg-white shadow-md px-5 py-3 rounded-md h-auto ${
+                className={`absolute bottom-0 translate-x-[-50%] z-50 -translate-y-[-100%] bg-white shadow-md px-5 py-3 rounded-md h-auto ${
                   isOpen ? "" : "hidden"
                 } `}
               >
@@ -231,6 +231,11 @@ const Header = () => {
                   <li className="cursor-pointer" onClick={() => signOut(auth)}>
                     Logout
                   </li>
+                  {userInfo.role === 1 && (
+                    <li className="cursor-pointer">
+                      <Link to="/dashboard">Dashboard</Link>
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>
